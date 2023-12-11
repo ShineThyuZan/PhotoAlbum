@@ -1,8 +1,10 @@
 package com.po.photoalbum
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -11,22 +13,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.po.photoalbum.ui.theme.common.LoginViewModel
-import com.po.photoalbum.ui.theme.common.Navigation
+import com.po.photoalbum.ui.common.LoginViewModel
+import com.po.photoalbum.ui.common.Navigation
+import com.po.photoalbum.ui.detail.DetailViewModel
+import com.po.photoalbum.ui.home.HomeViewModel
 import com.po.photoalbum.ui.theme.resources.PhotoAlbumTheme
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val loginViewModel = viewModel(modelClass = LoginViewModel::class.java)
+            val homeViewModel = viewModel(modelClass = HomeViewModel::class.java)
+            val detailViewModel = viewModel(modelClass = DetailViewModel::class.java)
             PhotoAlbumTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                  Navigation(loginViewModel = loginViewModel)
+                    Navigation(
+                        loginViewModel = loginViewModel,
+                        detailViewModel = detailViewModel,
+                        homeViewModel = homeViewModel
+                    )
                 }
             }
         }

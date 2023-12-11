@@ -1,4 +1,4 @@
-package com.po.photoalbum.ui.theme.common
+package com.po.photoalbum.ui.common
 
 import android.content.Context
 import android.widget.Toast
@@ -50,7 +50,7 @@ class LoginViewModel(
     }
 
     private fun validateLoginForm() =
-        loginUiState.userName.isBlank() && loginUiState.password.isNotBlank()
+        loginUiState.userName.isNotBlank() && loginUiState.password.isNotBlank()
 
     private fun validateSignUpForm() =
         loginUiState.userNameSignUp.isNotBlank() &&

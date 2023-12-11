@@ -1,4 +1,4 @@
-package com.po.photoalbum.ui.theme.common
+package com.po.photoalbum.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -29,15 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.po.photoalbum.ui.theme.resources.PhotoAlbumTheme
+
 @Composable
-fun SignUpScreen(
+fun LoginScreen(
     loginViewModel: LoginViewModel? = null,
     onNavToHomePage: () -> Unit,
-    onNavToLoginPage: () -> Unit
+    onNavToSignUpPage: () -> Unit
 ) {
     val loginUiState = loginViewModel?.loginUiState
-    val isError = loginUiState?.signUpError != null
+    val isError = loginUiState?.loginError != null
     val context = LocalContext.current
 
     Column(
@@ -45,14 +46,14 @@ fun SignUpScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Sign Up",
+            text = "Login",
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Black,
             color = MaterialTheme.colorScheme.primary
         )
         if (isError) {
             Text(
-                text = loginUiState?.signUpError ?: "unknown error",
+                text = loginUiState?.loginError ?: "unknown error",
                 color = Color.Red
             )
         }
@@ -60,9 +61,9 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            value = loginUiState?.userNameSignUp ?: "",
+            value = loginUiState?.userName ?: "",
             onValueChange = {
-                loginViewModel?.onUserNameSignUpChange(it)
+                loginViewModel?.onUserNameChange(it)
             },
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Person, contentDescription = "")
@@ -76,9 +77,9 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            value = loginUiState?.passwordSignUp ?: "",
+            value = loginUiState?.password ?: "",
             onValueChange = {
-                loginViewModel?.onPasswordSignUpChange(it)
+                loginViewModel?.onPasswordNameChange(it)
             },
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Lock, contentDescription = "")
@@ -89,25 +90,9 @@ fun SignUpScreen(
             isError = isError,
             visualTransformation = PasswordVisualTransformation()
         )
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            value = loginUiState?.confirmPasswordSignUp ?: "",
-            onValueChange = {
-                loginViewModel?.onConfirmPasswordChange(it)
-            },
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "")
-            },
-            label = {
-                Text(text = "Confirm Password")
-            },
-            isError = isError,
-            visualTransformation = PasswordVisualTransformation()
-        )
+
         Button(onClick = {
-            loginViewModel?.createUser(context)
+            loginViewModel?.loginUser(context)
         }) {
             Text(text = "Sign In")
         }
@@ -116,27 +101,27 @@ fun SignUpScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "Already have and Account?")
+            Text(text = "Don't have and Account?")
             Spacer(modifier = Modifier.size(8.dp))
-            TextButton(onClick = { onNavToLoginPage.invoke() }) {
+            TextButton(onClick = { onNavToSignUpPage.invoke() }) {
                 Text(text = "Sign Up")
             }
         }
-        if (loginUiState?.isLoading == true) {
+        if(loginUiState?.isLoading== true){
             CircularProgressIndicator()
         }
-        LaunchedEffect(key1 = loginViewModel?.hasUser) {
-            if (loginViewModel?.hasUser == true) {
+        LaunchedEffect(key1 = loginViewModel?.hasUser ){
+            if(loginViewModel?.hasUser == true){
                 onNavToHomePage.invoke()
             }
         }
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
-fun SignUpScreen() {
-    PhotoAlbumTheme {
-        SignUpScreen()
+fun loginPreview(){
+    Surface {
+        LoginScreen(onNavToHomePage = { /*TODO*/ }) {}
     }
 }

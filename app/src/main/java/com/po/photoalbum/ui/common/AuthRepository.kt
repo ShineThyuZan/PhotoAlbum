@@ -1,4 +1,4 @@
-package com.po.photoalbum.ui.theme.common
+package com.po.photoalbum.ui.common
 
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -26,7 +26,6 @@ class AuthRepository {
                 }
             }
     }
-
 
     suspend fun login(
         email: String,
