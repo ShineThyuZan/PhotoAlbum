@@ -64,7 +64,6 @@ class StorageRepository {
     fun addNote(
         userId: String,
         title: String,
-        description: String,
         timestamp: com.google.firebase.Timestamp,
         onComplete: (Boolean) -> Unit
     ) {
@@ -72,7 +71,6 @@ class StorageRepository {
         val photo = PhotoAlbums(
             userId = userId,
             title,
-            description,
             timestamp,
             documentId = photoId
         )

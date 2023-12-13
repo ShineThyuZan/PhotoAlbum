@@ -1,19 +1,24 @@
 package com.po.photoalbum.ui.home
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
@@ -36,20 +41,25 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.google.firebase.Timestamp
+import com.po.photoalbum.R
 import com.po.photoalbum.ui.common.Resources
 import com.po.photoalbum.ui.model.PhotoAlbums
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.compose.foundation.pager.rememberPagerState
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
@@ -69,6 +79,7 @@ fun HomeScreen(
     LaunchedEffect(key1 = Unit) {
         homeViewModel?.loadPhotoAlbum()
     }
+
 
     Scaffold(
         topBar = {
@@ -98,7 +109,11 @@ fun HomeScreen(
             }
         }
     ) { padding ->
+
         Column(modifier = Modifier.padding(padding)) {
+
+            HorizontalPagerView(images)
+
             when (homeUiState.photoAlbumsList) {
                 is Resources.Loading -> {
                     CircularProgressIndicator(
@@ -149,6 +164,7 @@ fun HomeScreen(
                         )
                     }
                 }
+
                 else -> {
                     Text(
                         text = homeUiState.photoAlbumsList.throwable?.localizedMessage
@@ -187,31 +203,21 @@ fun PhotoItem(
             Text(
                 text = formatDate(photoAlbums.timeStamp),
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
                 maxLines = 1,
                 overflow = TextOverflow.Clip,
                 modifier = Modifier.padding(4.dp)
             )
             Spacer(modifier = Modifier.size(4.dp))
             CompositionLocalProvider(LocalContentColor provides LocalContentColor.current) {
-                Text(
-                    text = photoAlbums.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(4.dp),
-                    maxLines = 4
-                )
-            }
-            Spacer(modifier = Modifier.size(4.dp))
-            CompositionLocalProvider(LocalContentColor provides LocalContentColor.current) {
-                Text(
-                    text = photoAlbums.title,
-                    style = MaterialTheme.typography.bodyMedium,
-                    overflow = TextOverflow.Ellipsis,
+                AsyncImage(
+                    model = photoAlbums.url,
+                    contentDescription = "Avatar Image",
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .padding(4.dp)
-                        .align(Alignment.End),
-                    maxLines = 4
+                        .fillMaxWidth()
+                        .wrapContentHeight(Alignment.CenterVertically)
+                        .clickable { }
                 )
             }
         }

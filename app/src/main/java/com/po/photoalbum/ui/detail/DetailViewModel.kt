@@ -39,7 +39,6 @@ class DetailViewModel(
             repository.addNote(
                 userId = user!!.uid,
                 title = detailUiState.title,
-                description = detailUiState.photo,
                 timestamp = Timestamp.now()
             ) {
                 detailUiState = detailUiState.copy(
@@ -51,8 +50,7 @@ class DetailViewModel(
 
     fun setEditFields(photo: PhotoAlbums) {
         detailUiState = detailUiState.copy(
-            title = photo.title,
-            photo = photo.description,
+            title = photo.url,
         )
     }
 

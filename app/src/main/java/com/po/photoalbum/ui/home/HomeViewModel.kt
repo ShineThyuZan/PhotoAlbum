@@ -24,7 +24,7 @@ class HomeViewModel(
         get() = repository.getUserId()
 
     fun loadPhotoAlbum() {
-        Log.d("user.user.id",userId)
+        Log.d("user.user.id", userId)
         if (hasUser) {
             if (userId.isNotBlank())
                 getUserNotes(userId = userId)
@@ -44,9 +44,11 @@ class HomeViewModel(
             homeUiState = homeUiState.copy(photoAlbumsList = it)
         }
     }
-    fun deletePhoto(photoId : String) = repository.deletePhoto(photoId){
+
+    fun deletePhoto(photoId: String) = repository.deletePhoto(photoId) {
         homeUiState = homeUiState.copy(noteDeletedStatus = it)
     }
+
     fun signOut() = repository.signOut()
 }
 
