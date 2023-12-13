@@ -15,20 +15,49 @@ import com.po.photoalbum.ui.detail.DetailScreen
 import com.po.photoalbum.ui.detail.DetailViewModel
 import com.po.photoalbum.ui.home.HomeScreen
 import com.po.photoalbum.ui.home.HomeViewModel
+import com.po.photoalbum.ui.splash.SplashLottieScreen
 
 enum class LoginRoutes {
+    Splash,
     Signup,
     SignIn
 }
 
 enum class HomeRoute {
+    Splash,
     Home,
     Detail
 }
 
 enum class NestedRoute {
+    Splash,
     Main,
     Login
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun RootNavGraph(
+    navController: NavHostController= rememberNavController(),
+    loginViewModel: LoginViewModel,
+    detailViewModel: DetailViewModel,
+    homeViewModel: HomeViewModel
+) {
+    NavHost(
+        navController = navController,
+        startDestination = NestedRoute.Splash.name,
+    ) {
+        composable(route = NestedRoute.Splash.name) {
+            /** Lottie Animation*/
+            SplashLottieScreen(navController = navController)
+        }
+        authGraph(navController = navController, loginViewModel = loginViewModel)
+        homeGraph(
+            navController = navController,
+            homeViewModel = homeViewModel,
+            detailViewModel = detailViewModel
+        )
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
