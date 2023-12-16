@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.po.photoalbum.ui.common.Resources
-import com.po.photoalbum.ui.common.StorageRepository
-import com.po.photoalbum.ui.model.PhotoAlbums
+import com.po.photoalbum.ui.Resources
+import com.po.photoalbum.ui.StorageRepository
+import com.po.photoalbum.ui.model.PhotoAlbumsDTO
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -30,7 +30,7 @@ class HomeViewModel(
                 getUserNotes(userId = userId)
             else {
                 homeUiState = homeUiState.copy(
-                    photoAlbumsList = Resources.Error(
+                    photoAlbumsDTOList = Resources.Error(
                         throwable = Throwable(message = "User is not login")
                     )
                 )
@@ -41,7 +41,7 @@ class HomeViewModel(
     private fun getUserNotes(userId: String) = viewModelScope.launch {
         repository.getUserPhotoAlbum(userId = userId).collect {
             Log.d("list.album", it.data.toString())
-            homeUiState = homeUiState.copy(photoAlbumsList = it)
+            homeUiState = homeUiState.copy(photoAlbumsDTOList = it)
         }
     }
 
@@ -54,7 +54,7 @@ class HomeViewModel(
 
 
 data class HomeUiState(
-    val photoAlbumsList: Resources<List<PhotoAlbums>> = Resources.Loading(),
+    val photoAlbumsDTOList: Resources<List<PhotoAlbumsDTO>> = Resources.Loading(),
     val noteDeletedStatus: Boolean = false
 
 )

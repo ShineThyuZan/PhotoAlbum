@@ -1,11 +1,11 @@
-package com.po.photoalbum.ui.common
+package com.po.photoalbum.ui
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.po.photoalbum.ui.model.PhotoAlbums
+import com.po.photoalbum.ui.model.PhotoAlbumsDTO
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -22,7 +22,7 @@ class StorageRepository {
 
     fun getUserPhotoAlbum(
         userId: String
-    ): Flow<Resources<List<PhotoAlbums>>> = callbackFlow {
+    ): Flow<Resources<List<PhotoAlbumsDTO>>> = callbackFlow {
         var snapShotStateListener: ListenerRegistration? = null
         try {
             snapShotStateListener = photoRef
@@ -30,7 +30,7 @@ class StorageRepository {
                 .whereEqualTo("userId", userId)
                 .addSnapshotListener { snapshot, e ->
                     val response = if (snapshot != null) {
-                        val photos = snapshot.toObjects(PhotoAlbums::class.java)
+                        val photos = snapshot.toObjects(PhotoAlbumsDTO::class.java)
                         Resources.Success(data = photos)
                     } else {
                         Resources.Error(throwable = e?.cause)
@@ -49,12 +49,12 @@ class StorageRepository {
     fun getPhotos(
         photoId: String,
         onError: (Throwable?) -> Unit,
-        onSuccess: (PhotoAlbums) -> Unit
+        onSuccess: (PhotoAlbumsDTO) -> Unit
     ) {
         photoRef.document(photoId)
             .get()
             .addOnSuccessListener {
-                it?.toObject(PhotoAlbums::class.java)?.let { it1 -> onSuccess.invoke(it1) }
+                it?.toObject(PhotoAlbumsDTO::class.java)?.let { it1 -> onSuccess.invoke(it1) }
             }
             .addOnFailureListener { result ->
                 onError.invoke(result.cause)
@@ -68,7 +68,7 @@ class StorageRepository {
         onComplete: (Boolean) -> Unit
     ) {
         val photoId = photoRef.document().id
-        val photo = PhotoAlbums(
+        val photo = PhotoAlbumsDTO(
             userId = userId,
             title,
             timestamp,

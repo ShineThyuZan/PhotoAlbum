@@ -16,7 +16,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.po.photoalbum.R
-import com.po.photoalbum.ui.common.HomeRoute
+import com.po.photoalbum.ui.graph.HomeRoute
 import kotlinx.coroutines.delay
 
 @Composable

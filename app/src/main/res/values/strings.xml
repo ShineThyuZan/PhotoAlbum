@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Photo Album</string>
     <string name="watch">Watch Now</string>
+    <string name="input_limit" translatable="false">%d/%d</string>
 </resources>

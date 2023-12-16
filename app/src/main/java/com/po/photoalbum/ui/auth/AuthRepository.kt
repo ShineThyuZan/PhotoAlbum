@@ -1,4 +1,4 @@
-package com.po.photoalbum.ui.common
+package com.po.photoalbum.ui.auth
 
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth

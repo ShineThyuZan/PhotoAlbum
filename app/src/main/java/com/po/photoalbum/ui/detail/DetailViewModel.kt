@@ -7,8 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
-import com.po.photoalbum.ui.common.StorageRepository
-import com.po.photoalbum.ui.model.PhotoAlbums
+import com.po.photoalbum.ui.StorageRepository
+import com.po.photoalbum.ui.model.PhotoAlbumsDTO
 
 class DetailViewModel(
     private val repository: StorageRepository = StorageRepository()
@@ -48,7 +48,7 @@ class DetailViewModel(
         }
     }
 
-    fun setEditFields(photo: PhotoAlbums) {
+    fun setEditFields(photo: PhotoAlbumsDTO) {
         detailUiState = detailUiState.copy(
             title = photo.url,
         )
@@ -96,8 +96,8 @@ class DetailViewModel(
 data class DetailUiState(
     val photo: String = "",
     val title: String = "",
-    val selectedNote: PhotoAlbums? = null,
+    val selectedNote: PhotoAlbumsDTO? = null,
     val photoAddedStatus: Boolean = false,
     val updatePhotoStatus: Boolean = false,
-    val selectedPhoto: PhotoAlbums? = null
+    val selectedPhoto: PhotoAlbumsDTO? = null
 )

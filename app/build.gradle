@@ -80,6 +80,7 @@ dependencies {
 
     //multidex
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
 
 
     // coroutines
@@ -114,6 +115,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-firestore-ktx:24.9.1'
     implementation 'com.google.firebase:firebase-appcheck:17.1.1'
+
+    implementation 'com.google.truth:truth:1.1.3'
 
 
 }

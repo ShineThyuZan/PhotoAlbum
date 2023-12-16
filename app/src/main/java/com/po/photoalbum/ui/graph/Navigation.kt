@@ -1,4 +1,4 @@
-package com.po.photoalbum.ui.common
+package com.po.photoalbum.ui.graph
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -11,6 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.po.photoalbum.ui.auth.LoginScreen
+import com.po.photoalbum.ui.auth.LoginViewModel
+import com.po.photoalbum.ui.auth.SignUpScreen
 import com.po.photoalbum.ui.detail.DetailScreen
 import com.po.photoalbum.ui.detail.DetailViewModel
 import com.po.photoalbum.ui.home.HomeScreen

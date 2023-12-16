@@ -24,7 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +35,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -52,8 +53,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.firebase.Timestamp
-import com.po.photoalbum.ui.common.Resources
-import com.po.photoalbum.ui.model.PhotoAlbums
+import com.po.photoalbum.ui.Resources
+import com.po.photoalbum.ui.model.PhotoAlbumsDTO
 import com.po.photoalbum.ui.theme.resources.dimen
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -72,13 +73,62 @@ fun HomeScreen(
     var openDialog by remember {
         mutableStateOf(false)
     }
-    var selectedNote: PhotoAlbums? by remember {
+    var selectedNote: PhotoAlbumsDTO? by remember {
         mutableStateOf(null)
     }
     LaunchedEffect(key1 = Unit) {
         homeViewModel?.loadPhotoAlbum()
     }
+    AnimatedVisibility(visible = openDialog) {
 
+        AlertDialog(
+            onDismissRequest = {
+                openDialog = false
+            },
+            title = {
+                Text(
+                    "Are you sure to logout?",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            },
+            text = {
+                Text(
+                    text = "When logout, you need to remember your name and password. Remember? ",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        homeViewModel?.signOut()
+                        navToLoginPage.invoke()
+                        openDialog = false
+                    },
+                    shape = ButtonDefaults.filledTonalShape,
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)
+                ) {
+                    Text(
+                        "Logout",
+                        color = MaterialTheme.colorScheme.onError.copy(
+                            0.3f
+                        )
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        openDialog = false
+                    }
+                ) {
+                    Text(
+                        "Cancel",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -86,8 +136,7 @@ fun HomeScreen(
                 navigationIcon = {},
                 actions = {
                     IconButton(onClick = {
-                        homeViewModel?.signOut()
-                        navToLoginPage.invoke()
+                        openDialog = true
                     }) {
                         Icon(
                             imageVector = Icons.Default.ExitToApp,
@@ -109,12 +158,14 @@ fun HomeScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(MaterialTheme.dimen.base_12x)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(MaterialTheme.dimen.base_12x)
+            ) {
                 HorizontalPagerView(images)
             }
-            when (homeUiState.photoAlbumsList) {
+            when (homeUiState.photoAlbumsDTOList) {
                 is Resources.Loading -> {
                     CircularProgressIndicator(
                         modifier = Modifier
@@ -128,8 +179,8 @@ fun HomeScreen(
                         columns = GridCells.Fixed(2),
                         contentPadding = PaddingValues(16.dp)
                     ) {
-                        items(homeUiState.photoAlbumsList.data ?: emptyList()) { photos ->
-                            PhotoItem(photoAlbums = photos,
+                        items(homeUiState.photoAlbumsDTOList.data ?: emptyList()) { photos ->
+                            PhotoItem(photoAlbumsDTO = photos,
                                 onLongClick = {
                                     openDialog = true
                                     selectedNote = photos
@@ -138,36 +189,11 @@ fun HomeScreen(
                             }
                         }
                     }
-                    AnimatedVisibility(visible = openDialog) {
-                        AlertDialog(
-                            onDismissRequest = {
-                                openDialog = false
-                            },
-                            title = { Text(text = "Delete Note?") },
-                            confirmButton = {
-                                Button(
-                                    onClick = {
-                                        selectedNote?.documentId?.let {
-                                            homeViewModel?.deletePhoto(it)
-                                        }
-                                        openDialog = false
-                                    },
-                                ) {
-                                    Text(text = "Delete")
-                                }
-                            },
-                            dismissButton = {
-                                Button(onClick = { openDialog = false }) {
-                                    Text(text = "Cancel")
-                                }
-                            }
-                        )
-                    }
                 }
 
                 else -> {
                     Text(
-                        text = homeUiState.photoAlbumsList.throwable?.localizedMessage
+                        text = homeUiState.photoAlbumsDTOList.throwable?.localizedMessage
                             ?: "Unknown Error",
                         color = Color.Red.copy(alpha = 0.5f)
                     )
@@ -186,7 +212,7 @@ fun HomeScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PhotoItem(
-    photoAlbums: PhotoAlbums,
+    photoAlbumsDTO: PhotoAlbumsDTO,
     onLongClick: () -> Unit,
     onClick: () -> Unit,
 ) {
@@ -201,7 +227,7 @@ fun PhotoItem(
     ) {
         Column {
             Text(
-                text = formatDate(photoAlbums.timeStamp),
+                text = formatDate(photoAlbumsDTO.timeStamp),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
@@ -211,7 +237,7 @@ fun PhotoItem(
             Spacer(modifier = Modifier.size(4.dp))
             CompositionLocalProvider(LocalContentColor provides LocalContentColor.current) {
                 AsyncImage(
-                    model = photoAlbums.url,
+                    model = photoAlbumsDTO.url,
                     contentDescription = "Avatar Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
