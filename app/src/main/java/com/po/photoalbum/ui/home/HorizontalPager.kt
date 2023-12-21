@@ -24,9 +24,9 @@ import kotlinx.coroutines.launch
 data class Image(val imageUrl: Int)
 
 val images = listOf(
-    Image(R.drawable.screen1),
-    Image(R.drawable.screen2),
-    Image(R.drawable.screen3),
+    Image(R.drawable.img1),
+    Image(R.drawable.img2),
+    Image(R.drawable.img3),
 )
 
 @OptIn(ExperimentalFoundationApi::class)

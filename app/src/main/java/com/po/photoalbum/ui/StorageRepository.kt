@@ -71,8 +71,6 @@ class StorageRepository {
         val photo = PhotoAlbumsDTO(
             userId = userId,
             title,
-            timestamp,
-            documentId = photoId
         )
         photoRef
             .document(photoId)

@@ -41,7 +41,7 @@ enum class NestedRoute {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RootNavGraph(
-    navController: NavHostController= rememberNavController(),
+    navController: NavHostController = rememberNavController(),
     loginViewModel: LoginViewModel,
     detailViewModel: DetailViewModel,
     homeViewModel: HomeViewModel
@@ -103,7 +103,6 @@ fun NavGraphBuilder.authGraph(
                     }
                 },
                 loginViewModel = loginViewModel
-
             ) {
                 navController.navigate(LoginRoutes.Signup.name) {
                     launchSingleTop = true
@@ -143,13 +142,7 @@ fun NavGraphBuilder.homeGraph(
         composable(HomeRoute.Home.name) {
             HomeScreen(
                 homeViewModel = homeViewModel,
-                onPhotoAlbumClick = { photoId ->
-                    navController.navigate(
-                        HomeRoute.Detail.name + "?=$photoId"
-                    ) {
-                        launchSingleTop = true
-                    }
-                },
+                detailViewModel = detailViewModel,
                 navToDetailPage = {
                     navController.navigate(HomeRoute.Detail.name)
                 }) {
@@ -162,15 +155,15 @@ fun NavGraphBuilder.homeGraph(
             }
         }
         composable(
-            route = HomeRoute.Detail.name + "?id={id}",
-            arguments = listOf(navArgument("id") {
+            route = HomeRoute.Detail.name,
+            arguments = listOf(navArgument("url") {
                 type = NavType.StringType
                 defaultValue = ""
             }
             )) { entry ->
             DetailScreen(
                 detailViewModel = detailViewModel,
-                photoId = entry.arguments?.getString("id") as String
+                // photoId = entry.arguments?.getString("url") as String
             ) {
                 navController.navigateUp()
             }

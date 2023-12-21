@@ -1,9 +1,12 @@
 package com.po.photoalbum.ui.auth
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
@@ -28,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -53,101 +57,114 @@ fun LoginScreen(
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackState = remember { SnackbarHostState() }
-    Scaffold(
-        contentWindowInsets = WindowInsets(
-            bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-        ),
-        topBar = {
-            CustomTopBar(
-                onNavigation = {},
-                onActions = {
-                    TextButton(
-                        modifier = Modifier.padding(end = MaterialTheme.dimen.small),
-                        onClick = {
-                            onNavToSignUpPage.invoke()
+    Box{
+        Image(
+            modifier = Modifier.fillMaxSize(),
+            painter = painterResource(R.drawable.bg),
+            contentDescription = "background_image",
+            contentScale = ContentScale.FillBounds
+        )
+        Scaffold(
+            contentWindowInsets = WindowInsets(
+                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+            ),
+            topBar = {
+                CustomTopBar(
+                    onNavigation = {},
+                    onActions = {
+                        TextButton(
+                            modifier = Modifier.padding(end = MaterialTheme.dimen.small),
+                            onClick = {
+                                onNavToSignUpPage.invoke()
+                            }
+                        ) {
+                            Text(
+                                text = "Sign Up",
+                                color = MaterialTheme.colorScheme.primary
+                            )
                         }
-                    ) {
-                        Text(
-                            text = "Sign Up",
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                },
-                background = Color.Transparent,
-                title = "Login",
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackState)
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
-                .imePadding()
-                .padding(MaterialTheme.dimen.base_2x),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CommonTextField(
+                    },
+                    background = Color.Transparent,
+                    title = "Login",
+                )
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackState)
+            },
+            containerColor =  Color.Transparent
+        ) { paddingValues ->
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    placeholder = "Email",
-                    value = loginUiState?.userName ?: "",
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next,
-                    onValueChanged = {
-                        loginViewModel?.onUserNameChange(it)
-                    },
-                    onValueCleared = {
-                        loginViewModel?.onUserNameClear()
-                    },
-                    isError = isError ?: false,
-                    errorMessage = "Please type correct Email name"
-                )
-                CustomVerticalSpacer(size = MaterialTheme.dimen.base_2x)
-                PasswordTextField(
-                    onValueChanged = {
-                        loginViewModel?.onPasswordNameChange(it)
-                    },
-                    keyboardAction = { keyboardController!!.hide() },
-                    isError = isError ?: false,
-                    errorMessage = isError.toString(),
-                    password = loginUiState?.password ?: "",
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Password,
-                )
-
-                Spacer(modifier = Modifier.size(16.dp))
-                    Button(
-                    onClick = {
-                        loginViewModel?.loginUser(context)
-                    },
-                    shape = CircleShape
+                        .padding(paddingValues)
+                        .verticalScroll(rememberScrollState())
+                        .fillMaxWidth()
+                        .imePadding()
+                        .padding(MaterialTheme.dimen.base_2x),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Login")
-                    CustomVerticalSpacer(size = MaterialTheme.dimen.base)
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_small_chevron_right),
-                        contentDescription = "chevron right"
-                    )
-                }
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CommonTextField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            placeholder = "Type Email ( eg.moe@gmail.com )",
+                            value = loginUiState?.userName ?: "",
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next,
+                            onValueChanged = {
+                                loginViewModel?.onUserNameChange(it)
+                            },
+                            onValueCleared = {
+                                loginViewModel?.onUserNameClear()
+                            },
+                            isError = isError ?: false,
+                            errorMessage = "Please type correct Email name"
+                        )
+                        CustomVerticalSpacer(size = MaterialTheme.dimen.base_2x)
+                        PasswordTextField(
+                            onValueChanged = {
+                                loginViewModel?.onPasswordNameChange(it)
+                            },
+                            keyboardAction = { keyboardController!!.hide() },
+                            isError = isError ?: false,
+                            errorMessage = isError.toString(),
+                            password = loginUiState?.password ?: "",
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Password,
+                            placeholder = "Type password"
+                        )
 
-                if (loginUiState?.isLoading == true) {
-                    CircularProgressIndicator()
-                }
-                LaunchedEffect(key1 = loginViewModel?.hasUser) {
-                    if (loginViewModel?.hasUser == true) {
-                        onNavToHomePage.invoke()
+                        Spacer(modifier = Modifier.size(16.dp))
+                        Button(
+                            onClick = {
+                                loginViewModel?.loginUser(context)
+                            },
+                            shape = CircleShape
+                        ) {
+                            Text(text = "Login")
+                            CustomVerticalSpacer(size = MaterialTheme.dimen.base)
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_small_chevron_right),
+                                contentDescription = "chevron right"
+                            )
+                        }
+
+                        if (loginUiState?.isLoading == true) {
+                            CircularProgressIndicator()
+                        }
+                        LaunchedEffect(key1 = loginViewModel?.hasUser) {
+                            if (loginViewModel?.hasUser == true) {
+                                onNavToHomePage.invoke()
+                            }
+                        }
                     }
                 }
             }
         }
     }
+
 }
 
 @Preview

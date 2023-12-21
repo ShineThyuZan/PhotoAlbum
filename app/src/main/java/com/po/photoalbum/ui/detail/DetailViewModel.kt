@@ -48,9 +48,15 @@ class DetailViewModel(
         }
     }
 
-    fun setEditFields(photo: PhotoAlbumsDTO) {
+   private fun setEditFields(photo: PhotoAlbumsDTO) {
         detailUiState = detailUiState.copy(
             title = photo.url,
+        )
+    }
+
+    fun saveUrl(url : String){
+        detailUiState = detailUiState.copy(
+            photo = url
         )
     }
 
@@ -99,5 +105,5 @@ data class DetailUiState(
     val selectedNote: PhotoAlbumsDTO? = null,
     val photoAddedStatus: Boolean = false,
     val updatePhotoStatus: Boolean = false,
-    val selectedPhoto: PhotoAlbumsDTO? = null
+    val selectedPhoto: PhotoAlbumsDTO? = null,
 )

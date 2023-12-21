@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Photo Album</string>
+    <string name="app_name">Moe Pic</string>
     <string name="watch">Watch Now</string>
     <string name="input_limit" translatable="false">%d/%d</string>
+    <string name="download_success">Download Success</string>
+    <string name="download_fail">Download Fail</string>
 </resources>

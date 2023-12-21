@@ -3,19 +3,15 @@ package com.po.photoalbum.ui.home
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,19 +22,18 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,12 +43,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.firebase.Timestamp
 import com.po.photoalbum.ui.Resources
+import com.po.photoalbum.ui.common.CustomVerticalSpacer
+import com.po.photoalbum.ui.detail.DetailViewModel
 import com.po.photoalbum.ui.model.PhotoAlbumsDTO
 import com.po.photoalbum.ui.theme.resources.dimen
 import java.text.SimpleDateFormat
@@ -64,7 +59,7 @@ import java.util.Locale
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel?,
-    onPhotoAlbumClick: (id: String) -> Unit,
+    detailViewModel: DetailViewModel?,
     navToDetailPage: () -> Unit,
     navToLoginPage: () -> Unit,
 ) {
@@ -73,8 +68,11 @@ fun HomeScreen(
     var openDialog by remember {
         mutableStateOf(false)
     }
-    var selectedNote: PhotoAlbumsDTO? by remember {
-        mutableStateOf(null)
+
+    LaunchedEffect(key1 = homeViewModel?.hasUser) {
+        if (homeViewModel?.hasUser == false) {
+            navToLoginPage.invoke()
+        }
     }
     LaunchedEffect(key1 = Unit) {
         homeViewModel?.loadPhotoAlbum()
@@ -105,13 +103,13 @@ fun HomeScreen(
                         openDialog = false
                     },
                     shape = ButtonDefaults.filledTonalShape,
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error)
+                    colors = ButtonDefaults.buttonColors(
+                        MaterialTheme.colorScheme.error
+                    )
                 ) {
                     Text(
                         "Logout",
-                        color = MaterialTheme.colorScheme.onError.copy(
-                            0.3f
-                        )
+                        color = MaterialTheme.colorScheme.surfaceBright
                     )
                 }
             },
@@ -157,14 +155,23 @@ fun HomeScreen(
             }
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
+        Column(modifier = Modifier.padding(padding)
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(MaterialTheme.dimen.base_12x)
+                    .height(140.dp)
             ) {
                 HorizontalPagerView(images)
             }
+            CustomVerticalSpacer(size = MaterialTheme.dimen.base)
+
+            Text(
+                modifier = Modifier.padding(MaterialTheme.dimen.base_2x),
+                text = "Your Photo Album"
+            )
+            CustomVerticalSpacer(size = MaterialTheme.dimen.base)
+
             when (homeUiState.photoAlbumsDTOList) {
                 is Resources.Loading -> {
                     CircularProgressIndicator(
@@ -177,16 +184,16 @@ fun HomeScreen(
                 is Resources.Success -> {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
-                        contentPadding = PaddingValues(16.dp)
+                        contentPadding = PaddingValues(MaterialTheme.dimen.tiny)
                     ) {
                         items(homeUiState.photoAlbumsDTOList.data ?: emptyList()) { photos ->
-                            PhotoItem(photoAlbumsDTO = photos,
-                                onLongClick = {
-                                    openDialog = true
-                                    selectedNote = photos
-                                }) {
-                                onPhotoAlbumClick.invoke(photos.documentId)
-                            }
+                            PhotoItem(
+                                photoAlbumsDTO = photos,
+                                onClick = {
+                                    detailViewModel!!.saveUrl(url = it)
+                                    navToDetailPage.invoke()
+                                }
+                            )
                         }
                     }
                 }
@@ -201,52 +208,35 @@ fun HomeScreen(
             }
         }
     }
-    LaunchedEffect(key1 = homeViewModel?.hasUser) {
-        if (homeViewModel?.hasUser == false) {
-            navToLoginPage.invoke()
-        }
-    }
 }
 
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PhotoItem(
     photoAlbumsDTO: PhotoAlbumsDTO,
-    onLongClick: () -> Unit,
-    onClick: () -> Unit,
+    onClick: (url: String) -> Unit,
 ) {
     Card(
         modifier = Modifier
-            .combinedClickable(
-                onLongClick = { onLongClick.invoke() },
-                onClick = { onClick.invoke() }
-            )
-            .padding(8.dp)
-            .fillMaxSize(),
+            .padding(MaterialTheme.dimen.tiny)
+            .height(250.dp)
+            .clickable {
+                onClick(photoAlbumsDTO.url)
+            },
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent,
+        ),
+        border = BorderStroke(width = 0.5.dp, color = Color.LightGray)
     ) {
-        Column {
-            Text(
-                text = formatDate(photoAlbumsDTO.timeStamp),
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium,
-                maxLines = 1,
-                overflow = TextOverflow.Clip,
-                modifier = Modifier.padding(4.dp)
-            )
-            Spacer(modifier = Modifier.size(4.dp))
-            CompositionLocalProvider(LocalContentColor provides LocalContentColor.current) {
-                AsyncImage(
-                    model = photoAlbumsDTO.url,
-                    contentDescription = "Avatar Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(Alignment.CenterVertically)
-                        .clickable { }
-                )
-            }
-        }
+        AsyncImage(
+            model = photoAlbumsDTO.url,
+            contentDescription = "Avatar Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    onClick(photoAlbumsDTO.url)
+                }
+        )
     }
 }
 
