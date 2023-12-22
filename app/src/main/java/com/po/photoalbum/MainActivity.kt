@@ -14,8 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.po.photoalbum.ui.auth.LoginViewModel
-import com.po.photoalbum.ui.graph.Navigation
 import com.po.photoalbum.ui.detail.DetailViewModel
+import com.po.photoalbum.ui.graph.Navigation
+import com.po.photoalbum.ui.graph.RootNavGraph
 import com.po.photoalbum.ui.home.HomeViewModel
 import com.po.photoalbum.ui.theme.resources.PhotoAlbumTheme
 
@@ -33,16 +34,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    /*  RootNavGraph(
+                     RootNavGraph(
                           loginViewModel = loginViewModel,
                           detailViewModel = detailViewModel,
                           homeViewModel = homeViewModel
-                      )*/
-                    Navigation(
+                      )
+               /*     Navigation(
                         loginViewModel = loginViewModel,
                         detailViewModel = detailViewModel,
                         homeViewModel = homeViewModel
-                    )
+                    )*/
                 }
             }
         }

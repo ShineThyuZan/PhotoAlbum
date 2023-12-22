@@ -10,7 +10,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val LightColorPalette = lightColorScheme(
+private val lightColorPalette = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
     primaryContainer = md_theme_light_primaryContainer,
@@ -39,7 +39,7 @@ private val LightColorPalette = lightColorScheme(
     inversePrimary = md_theme_light_inversePrimary,
 )
 
-private val DarkColorPalette = darkColorScheme(
+private val darkColorPalette = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
     primaryContainer = md_theme_dark_primaryContainer,
@@ -81,8 +81,8 @@ fun PhotoAlbumTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorPalette
-        else -> LightColorPalette
+        darkTheme -> darkColorPalette
+        else -> lightColorPalette
     }
     // val view = LocalView.current
     /*    if (!view.isInEditMode) {
@@ -91,7 +91,7 @@ fun PhotoAlbumTheme(
                 ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
             }
         }*/
-
+    
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

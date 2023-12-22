@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -57,7 +58,8 @@ fun PasswordTextField(
             painterResource(id = R.drawable.ic_small_eye)
         }
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = modifier
+        .fillMaxWidth()) {
         Row(
             modifier = modifier
                 .fillMaxWidth()

@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
@@ -25,7 +24,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -78,7 +76,6 @@ fun HomeScreen(
         homeViewModel?.loadPhotoAlbum()
     }
     AnimatedVisibility(visible = openDialog) {
-
         AlertDialog(
             onDismissRequest = {
                 openDialog = false
@@ -146,16 +143,11 @@ fun HomeScreen(
                     Text("Photo Album")
                 })
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { navToDetailPage.invoke() }) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null
-                )
-            }
-        }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(bottom = MaterialTheme.dimen.base)
         ) {
             Box(
                 modifier = Modifier
@@ -164,14 +156,10 @@ fun HomeScreen(
             ) {
                 HorizontalPagerView(images)
             }
-            CustomVerticalSpacer(size = MaterialTheme.dimen.base)
-
             Text(
                 modifier = Modifier.padding(MaterialTheme.dimen.base_2x),
                 text = "Your Photo Album"
             )
-            CustomVerticalSpacer(size = MaterialTheme.dimen.base)
-
             when (homeUiState.photoAlbumsDTOList) {
                 is Resources.Loading -> {
                     CircularProgressIndicator(
@@ -180,7 +168,6 @@ fun HomeScreen(
                             .wrapContentSize(align = Alignment.Center)
                     )
                 }
-
                 is Resources.Success -> {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
@@ -197,7 +184,6 @@ fun HomeScreen(
                         }
                     }
                 }
-
                 else -> {
                     Text(
                         text = homeUiState.photoAlbumsDTOList.throwable?.localizedMessage

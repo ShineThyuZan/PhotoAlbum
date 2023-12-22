@@ -3,7 +3,7 @@ package com.po.photoalbum.ui.theme.resources
 import androidx.compose.ui.graphics.Color
 
 
-val md_theme_light_primary = Color(0xFF006D32)
+val md_theme_light_primary = Color(0xFF794CCA)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFF7AFC9C)
 val md_theme_light_onPrimaryContainer = Color(0xFF00210B)

@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +58,18 @@ fun LoginScreen(
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackState = remember { SnackbarHostState() }
-    Box{
+    val loginBtnState = remember {
+        mutableStateOf(false)
+    }
+    if (loginUiState!!.userName.isNotBlank() && loginUiState.password.isNotBlank()) {
+        loginBtnState.value = true
+    }
+    LaunchedEffect(key1 = loginViewModel.hasUser) {
+        if (loginViewModel.hasUser) {
+            onNavToHomePage.invoke()
+        }
+    }
+    Box {
         Image(
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(R.drawable.bg),
@@ -91,7 +103,7 @@ fun LoginScreen(
             snackbarHost = {
                 SnackbarHost(hostState = snackState)
             },
-            containerColor =  Color.Transparent
+            containerColor = Color.Transparent
         ) { paddingValues ->
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(
@@ -110,14 +122,14 @@ fun LoginScreen(
                             modifier = Modifier
                                 .fillMaxWidth(),
                             placeholder = "Type Email ( eg.moe@gmail.com )",
-                            value = loginUiState?.userName ?: "",
+                            value = loginUiState.userName,
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next,
                             onValueChanged = {
-                                loginViewModel?.onUserNameChange(it)
+                                loginViewModel.onUserNameChange(it)
                             },
                             onValueCleared = {
-                                loginViewModel?.onUserNameClear()
+                                loginViewModel.onUserNameClear()
                             },
                             isError = isError ?: false,
                             errorMessage = "Please type correct Email name"
@@ -125,23 +137,24 @@ fun LoginScreen(
                         CustomVerticalSpacer(size = MaterialTheme.dimen.base_2x)
                         PasswordTextField(
                             onValueChanged = {
-                                loginViewModel?.onPasswordNameChange(it)
+                                loginViewModel.onPasswordNameChange(it)
                             },
                             keyboardAction = { keyboardController!!.hide() },
                             isError = isError ?: false,
-                            errorMessage = isError.toString(),
-                            password = loginUiState?.password ?: "",
+                            errorMessage = "Password length must be at least 8 ( eg.kozaw123 )",
+                            password = loginUiState.password,
                             imeAction = ImeAction.Done,
                             keyboardType = KeyboardType.Password,
-                            placeholder = "Type password"
+                            placeholder = "Type password",
                         )
 
                         Spacer(modifier = Modifier.size(16.dp))
                         Button(
                             onClick = {
-                                loginViewModel?.loginUser(context)
+                                loginViewModel.loginUser(context)
                             },
-                            shape = CircleShape
+                            shape = CircleShape,
+                            enabled = loginBtnState.value
                         ) {
                             Text(text = "Login")
                             CustomVerticalSpacer(size = MaterialTheme.dimen.base)
@@ -150,21 +163,14 @@ fun LoginScreen(
                                 contentDescription = "chevron right"
                             )
                         }
-
-                        if (loginUiState?.isLoading == true) {
+                        if (loginUiState.isLoading) {
                             CircularProgressIndicator()
-                        }
-                        LaunchedEffect(key1 = loginViewModel?.hasUser) {
-                            if (loginViewModel?.hasUser == true) {
-                                onNavToHomePage.invoke()
-                            }
                         }
                     }
                 }
             }
         }
     }
-
 }
 
 @Preview

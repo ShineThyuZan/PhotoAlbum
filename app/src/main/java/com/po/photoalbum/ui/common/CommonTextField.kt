@@ -1,5 +1,6 @@
 package com.po.photoalbum.ui.common
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.po.photoalbum.R
 import com.po.photoalbum.ui.theme.resources.dimen
+
 @Composable
 fun CommonTextField(
     modifier: Modifier = Modifier,
@@ -68,6 +70,9 @@ fun CommonTextField(
                     width = 1.dp,
                     color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
                     shape = RoundedCornerShape(MaterialTheme.dimen.base_2x)
+                )
+                .background(
+                    color = MaterialTheme.colorScheme.surface
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {

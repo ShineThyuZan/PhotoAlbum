@@ -75,7 +75,7 @@ fun DetailScreen(
                 navigationIcon = {
                     IconButton(onClick = { onNavigate.invoke() }) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
+                            painter = painterResource(id = R.drawable.baseline_keyboard_arrow_left_24),
                             contentDescription = "back action"
                         )
                     }
