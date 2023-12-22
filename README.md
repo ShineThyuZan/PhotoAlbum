@@ -21,4 +21,11 @@
 - After that you can run on your device or emulator.
 
 ### Show Sample Screen 
+<div style="display: flex; justify-content: center; padding: 100px; ">
+<img src="https://github.com/ShineThyuZan/PhotoAlbum/blob/main/app/src/main/res/drawable-v24/img_one.jpg" alt="Login Screenshot" width="190" height="380">
+<img src="https://github.com/ShineThyuZan/PhotoAlbum/blob/main/app/src/main/res/drawable-v24/img_two.jpg" alt="Sign Up Screenshot" width="190" height="380">
+  <img src="https://github.com/ShineThyuZan/PhotoAlbum/blob/main/app/src/main/res/drawable-v24/img_three.jpg" alt="PhotoAlbum Home Screenshot" width="190" height="380">
+  <img src="https://github.com/ShineThyuZan/PhotoAlbum/blob/main/app/src/main/res/drawable-v24/img_four.jpg" alt="Detail Home Screenshot" width="190" height="380">
+  <img src="https://github.com/ShineThyuZan/PhotoAlbum/blob/main/app/src/main/res/drawable-v24/img_five.jpg" alt="Logout Screenshot" width="190" height="380">
+</div>
 
