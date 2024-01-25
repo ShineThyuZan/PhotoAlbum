@@ -15,10 +15,13 @@
 - [Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)
 
 ## How to run Moe's PhotoAlbum app in Android Studio?
-- Clone project with [this link](git@github.com:ShineThyuZan/PhotoAlbum.git)
+- Clone project with [this link](https://github.com/ShineThyuZan/PhotoAlbum)
 - Android Studio will download necessary plugins and sync with Gradle files.
 - Check out the latest commit point at the `main` branch and sync the project.
 - After that you can run on your device or emulator.
+  
+## Application Download Link 
+- ApkPure Download Link [this link](https://apkpure.net/moe-s-photo-album/com.po.photoalbum)
 
 ### Show Sample Screen 
 <div style="display: flex; justify-content: center; padding: 100px; ">
