@@ -3,7 +3,7 @@
 + And also create a JSON file with this URL and corresponding userId.
 + Users can enter with a username and password, see their photo album, and include a photo detail view. 
 + In the photo detail view download button is included and user can download their photos.
-+ To Login 
+### To Login 
 - user name - kosoe@gmail.com , redgirl@gmail.com , whitegirl@gmail.com
 - password -123123123
 
