@@ -1,8 +1,9 @@
 # Moe's Photo Album Application
-+ This is a photo album application. In this application, the user needs one admin to import the photo URL in Firebase storage.
-+ And also create a JSON file with this URL and corresponding userId.
-+ Users can enter with a username and password, see their photo album, and include a photo detail view. 
-+ In the photo detail view download button is included and user can download their photos.
++ This application serves as a comprehensive photo album platform.
++ Initially, an admin is required to import photo URLs into Firebase storage and generate a corresponding JSON file linking these URLs to the respective user IDs. 
++ Once set up, users can log in using their unique username and password to access their personalized photo albums.
++ Within the albums, users can explore individual photo details, complete with a convenient download button to easily save their cherished images.
+
 ### To Login 
 - user name - kosoe@gmail.com , redgirl@gmail.com , whitegirl@gmail.com
 - password -123123123
